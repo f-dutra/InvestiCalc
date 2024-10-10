@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <math.h>
 #include <locale.h>
 
-float c, m, j, i, n, p;
+float capital, montante, juros, taxa, tempo, parcelas;
 int opt;
 
 void clrscr()
@@ -12,77 +11,86 @@ void clrscr()
     system("@cls||clear");
 }
 
+void limpar(void)
+{
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+}
+
 void printMenu(){
+	clrscr();
 	printf("===========================================\n"
 		   "\tCalculadora Financeira\n"
 		   "===========================================\n\n"
-		   
+
 		   "(1) Calcular juros simples\n"
 		   "(2) Calcular Juros Compostos\n\n"
-		   
+
 		   "(3) Sair\n\n"
 		   );
 }
 
 void perguntas(){
 	printf("Informe o capital inicial: ");
-	scanf("%f", &c);
+	scanf("%f", &capital);
 	printf("Informe a taxa de juros (sem %%): ");
-	scanf("%f", &i);
+	scanf("%f", &taxa);
 	printf("Informe o tempo/parcelas: ");
-	scanf("%f", &n);
-	if (c == 0 || i == 0 || n == 0){
+	scanf("%f", &tempo);
+	if (capital == 0 || taxa == 0 || tempo == 0){
 		printf("Informe o montante: ");
-		scanf("%f", &m);
+		scanf("%f", &montante);
 	}
 }
 
 void printResult(){
 	printf("\nMontante: R$ %.2f\n"
 			"Juros: R$ %.2f\n"
-			"Parcelas: R$ %.2f\n", m, j, p);
+			"Parcelas: R$ %.2f\n", montante, juros, parcelas);
 }
 
 void funcSimples(){
-	if (c == 0){
-		c = m / ((i/100*n)+1);
-		printf("Capital inicial: R$ %.2f", c);
-	} else if(i == 0){
-		i = ((m/c)-1)/n;
-		printf("Taxa de juros: %.2f%%", i);
-	} else if (n == 0){
-		n = ((m/c)+1)/i/100;
-		printf("Tempo de aplicação/parcelas: %.2f", n);
+	if (capital == 0){
+		capital = montante / ((taxa*tempo)+1);
+		printf("Capital inicial: R$ %.2f", capital);
+	} else if(taxa == 0){
+		taxa = ((montante/capital)-1)/tempo;
+		printf("Taxa de juros: %.2f%%", taxa*100);
+	} else if (tempo == 0){
+		tempo = ((montante/capital)+1)/taxa;
+		printf("Tempo de aplicação/parcelas: %.2f", tempo);
 	} else {
-		m = c*((i/100*n)+1);
-		j = m - c;
-		p = m / n;
+		montante = capital*((taxa*tempo)+1);
+		juros = montante - capital;
+		parcelas = montante / tempo;
 		printResult();
 	}
 }
 
 void funcComposto(){
-	if (c == 0){
-		c = m / pow((i/100*n), n);
-		printf("Capital inicial: R$ %.2f", c);
-	} else if(i == 0){
-		i = pow((m/c), 1/n)-1;
-		printf("Taxa de juros: %.2f%%", i);
-	} else if (n == 0){
-		n = log((m/c))/log((i/100+1));
-		printf("Tempo de aplicação/parcelas: %.2f", n);
+	if (capital == 0){
+		capital = montante / pow((taxa+1), tempo);
+		printf("Capital inicial: R$ %.2f", capital);
+	} else if(taxa == 0){
+		taxa = pow((montante/capital), 1/tempo)-1;
+		printf("Taxa de juros: %.2f%%", taxa*100);
+	} else if (tempo == 0){
+		tempo = log((montante/capital))/log((taxa/+1));
+		printf("Tempo de aplicação/parcelas: %.2f", tempo);
 	} else {
-		m = c*pow((i/100+1), n);
-		j = m - c;			
-		p = m / n;
+		montante = capital*pow((taxa+1), tempo);
+		juros = montante - capital;
+		parcelas = montante / tempo;
 	    printResult();
-	}		
+	}
 }
 
 void continuar(){
 	char controle;
-	
-	fflush(stdin);
+
+	limpar();
 			printf("\n\nRealizar outro cálculo (s/n)? ");
 			scanf("%c", &controle);
 			if (controle == 'n'){
@@ -100,7 +108,7 @@ int main(){
 			printf("Erro! Opção inválida.\n\n");
 		}
 		scanf(" %d", &opt);
-		
+
 		if(opt == 1){
 		while (opt == 1){
 			clrscr();
@@ -110,6 +118,7 @@ int main(){
 					" Digite 0 para indicar uma icógnita\n"
 					"-------------------------------------------\n\n");
 			perguntas();
+			taxa = taxa / 100;
 			funcSimples();
 			continuar();
 			}
@@ -122,15 +131,16 @@ int main(){
 					" Digite 0 para indicar uma icógnita\n"
 					"-------------------------------------------\n\n");
 			perguntas();
+			taxa = taxa / 100;
 			funcComposto();
 			continuar();
 			}
-		} 
+		}
 		else if (opt == 3){
 			printf("Encerrando o programa...");
 		} else{
 			opt = 404;
 		}
-		clrscr();
 	}
 }
+
