@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <locale.h>
 
@@ -11,7 +12,7 @@ void clrscr()
     system("@cls||clear");
 }
 
-void limpar(void)
+void limpar_buffer(void)
 {
     int c;
     do {
@@ -19,7 +20,7 @@ void limpar(void)
     } while (c != '\n' && c != EOF);
 }
 
-void printMenu(){
+void print_menu(){
 	clrscr();
 	printf("===========================================\n"
 		   "\tCalculadora Financeira\n"
@@ -30,6 +31,24 @@ void printMenu(){
 
 		   "(3) Sair\n\n"
 		   );
+
+	if(opt == 404){
+		printf("Erro! Opção inválida.\n\n");
+	}
+}
+
+void print_calc(){
+	clrscr();
+	char tipo[10] = "Simples";
+	if (opt == 2){
+		strcpy(tipo, "Compostos");
+	}
+	printf(	"===========================================\n"
+		"\t\tJuros %s\n"
+		"===========================================\n"
+		" Digite 0 para indicar uma icógnita\n"
+		"-------------------------------------------\n\n", tipo);
+
 }
 
 void perguntas(){
@@ -37,6 +56,7 @@ void perguntas(){
 	scanf("%f", &capital);
 	printf("Informe a taxa de juros (sem %%): ");
 	scanf("%f", &taxa);
+	taxa = taxa / 100;
 	printf("Informe o tempo/parcelas: ");
 	scanf("%f", &tempo);
 	if (capital == 0 || taxa == 0 || tempo == 0){
@@ -45,13 +65,13 @@ void perguntas(){
 	}
 }
 
-void printResult(){
+void print_result(){
 	printf("\nMontante: R$ %.2f\n"
 			"Juros: R$ %.2f\n"
 			"Parcelas: R$ %.2f\n", montante, juros, parcelas);
 }
 
-void funcSimples(){
+void func_simples(){
 	if (capital == 0){
 		capital = montante / ((taxa*tempo)+1);
 		printf("Capital inicial: R$ %.2f", capital);
@@ -65,11 +85,11 @@ void funcSimples(){
 		montante = capital*((taxa*tempo)+1);
 		juros = montante - capital;
 		parcelas = montante / tempo;
-		printResult();
+		print_result();
 	}
 }
 
-void funcComposto(){
+void func_composto(){
 	if (capital == 0){
 		capital = montante / pow((taxa+1), tempo);
 		printf("Capital inicial: R$ %.2f", capital);
@@ -83,17 +103,17 @@ void funcComposto(){
 		montante = capital*pow((taxa+1), tempo);
 		juros = montante - capital;
 		parcelas = montante / tempo;
-	    printResult();
+	    	print_result();
 	}
 }
 
 void continuar(){
-	char controle;
+	char c;
 
-	limpar();
+	limpar_buffer();
 			printf("\n\nRealizar outro cálculo (s/n)? ");
-			scanf("%c", &controle);
-			if (controle == 'n'){
+			scanf("%c", &c);
+			if (c == 'n'){
 				opt = 0;
 			}
 }
@@ -103,36 +123,17 @@ void continuar(){
 int main(){
 	setlocale(LC_ALL, "Portuguese");
 	while(opt != 3){
-		printMenu();
-		if(opt == 404){
-			printf("Erro! Opção inválida.\n\n");
-		}
+		print_menu();
 		scanf(" %d", &opt);
 
-		if(opt == 1){
-		while (opt == 1){
+		if(opt == 1 || opt == 2 ){
+		while (opt != 0){
 			clrscr();
-			printf(	"===========================================\n"
-			   		"\tJuros Simples\n"
-			   		"===========================================\n"
-					" Digite 0 para indicar uma icógnita\n"
-					"-------------------------------------------\n\n");
+			print_calc();
 			perguntas();
-			taxa = taxa / 100;
-			funcSimples();
-			continuar();
-			}
-		} else if (opt == 2){
-			while(opt == 2){
-			clrscr();
-			printf(	"===========================================\n"
-		  	 		"\tJuros Compostos\n"
-			   		"===========================================\n"
-					" Digite 0 para indicar uma icógnita\n"
-					"-------------------------------------------\n\n");
-			perguntas();
-			taxa = taxa / 100;
-			funcComposto();
+
+			if (opt == 1){func_simples();}
+			else{func_composto();}
 			continuar();
 			}
 		}
