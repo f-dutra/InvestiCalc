@@ -1,0 +1,49 @@
+Algoritmo "Calculadora Financeira"
+
+Var
+   opcao: INTEIRO
+   M, C, i, t: REAL
+
+Inicio
+   REPITA
+      escreval("**************")
+      escreval("JUROS COMPOSTOS - 1")
+      escreval("JUROS SIMPLES - 2")
+      escreval("SAIR - 3")
+      escreval("**************")
+      escreval("Digite sua opção")
+      leia(opcao)
+
+      SE opcao = 1 ENTÃO
+         escreval("Informe o valor inicial a ser investido:")
+         leia(C)
+         escreval("Informe a taxa mensal de juros (em %):")
+         leia(i)
+         escreval("Informe o número de meses:")
+         leia(t)
+
+         // Cálculo de Juros Compostos
+         M := C * (1 + i/100)^t
+         escreval("O valor total ao final do período será de: ", M)
+
+      SENÃO SE opcao = 2 ENTÃO
+         escreval("Informe o valor inicial a ser investido:")
+         leia(C)
+         escreval("Informe a taxa mensal de juros (em %):")
+         leia(i)
+         escreval("Informe o número de meses:")
+         leia(t)
+
+         // Cálculo de Juros Simples
+         M := (C * i/100 * t) + C
+         escreval("O valor total ao final do período será de: ", M)
+
+      SENÃO SE opcao = 3 ENTÃO
+         escreval("Fim do programa.")
+         PARE
+      SENÃO
+         escreval("Opção inválida! Tente novamente.")
+      FIMSE
+   ATE opcao = 3
+
+Fimalgoritmo
