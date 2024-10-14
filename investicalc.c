@@ -78,5 +78,7 @@ int main(){
 		scanf("%c", &ch);
 	}
 
+	mpf_clears(m, c, r, i, a, aux, acpy, ccpy, NULL);
+	return 0;
 }
 
