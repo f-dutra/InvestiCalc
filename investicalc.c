@@ -5,7 +5,6 @@
 
 mpf_t m, c, r, i, a, aux, acpy, ccpy;
 int t;
-char ch;
 
 void clr_stdin(void){
     int q;
@@ -17,7 +16,7 @@ void clr_stdin(void){
 void print_menu(){
 	system("@cls||clear");
 	printf(" ===========================================\n"
-		" \tInvestiCalc v1.0\n"
+		" \tInvestiCalc v1.1\n"
 		" ===========================================\n\n"
 	);
 }
@@ -38,7 +37,7 @@ void perguntas(){
 }
 
 void calc_invest(){
-	// Formula: c(1 + i)^t + a(((1+i)^t)/i)
+	// Formula: m = c(1 + i)^t + a(((1+i)^t)/i)
 
 	mpf_set(acpy, a); // usadas pra calcular o rendimento
 	mpf_set(ccpy, c);
@@ -48,14 +47,14 @@ void calc_invest(){
 	mpf_mul(c, c, aux);
 
 	mpf_sub_ui(aux, aux, 1); 	// segunda parte da formula
-	mpf_div(aux, aux, i);		//  a(((1+i)^t)/i)
+	mpf_div(aux, aux, i);		//  a(((1+i)^t)-1)/i
 	mpf_mul(a, a, aux);
 
 	mpf_add(m, a, c); // resultado final
 
 	mpf_mul_ui(acpy, acpy, t); //calculo do rendimento
 	mpf_sub(r, m, ccpy);
-	mpf_sub(r, r, acpy);	// m - c - a * t
+	mpf_sub(r, r, acpy);	// r = m - (c + a * t)
 }
 
 void print_res(){
@@ -67,6 +66,8 @@ void print_res(){
 int main(){
 	setlocale(LC_ALL, "portuguese");
 	mpf_inits(m, c, r, i, a, aux, acpy, ccpy, NULL);
+	char ch;
+
 	while(ch != 'n' && ch != 'N'){
 		print_menu();
 		perguntas();
@@ -74,7 +75,7 @@ int main(){
 		print_res();
 
 		clr_stdin();
-		printf("\n\n Realizar outro cálculo (s/n)? ");
+		printf("\n\n Realizar outro calculo (s/n)? ");
 		scanf("%c", &ch);
 	}
 
