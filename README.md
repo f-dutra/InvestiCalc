@@ -1,4 +1,6 @@
 # Instalação:
-Necessário possuir a biblioteca GMP instalada
 
-gcc -o investicalc investicalc.c -lgmp
+gcc -o investicalc investicalc.c -lm
+ou
+gcc -o investicalc_gmp investicalc_gmp.c -lgmp
+
