@@ -186,7 +186,7 @@ int main(){
 					continuar();
 				} break;
 			case 4:
-				printf("Encerrando...");
+				printf("Encerrando o programa...");
 				break;
 			default:
 				if(opt != 404){ opt = 404; }
