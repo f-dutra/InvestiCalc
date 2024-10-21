@@ -16,7 +16,7 @@ double m, c, j, i, t, aporte;
 */
 
 void clr_stdin(void){	// limpar a entrada de texto
-    int q;				// evitar bugs ao escanear chars 
+    int q;		// evitar bugs ao escanear chars 
     do {
         q = getchar();
     } while (q != '\n' && q != EOF);
@@ -34,7 +34,7 @@ void print_menu(){
 		"(4) Sair\n\n"
 	);
 	if(opt == 404){
-		printf("Erro! OpÁ„o inv·lida.\n\n");
+		printf("Erro! Op√ß√£o inv√°lida.\n\n");
 	}	
 }
 
@@ -51,15 +51,15 @@ print_menu_calc(){
 	if (opt == 3){
 	
 		printf(	"===========================================\n"
-				" %s\n"
-				"===========================================\n\n", tipo);
+			" %s\n"
+			"===========================================\n\n", tipo);
 	}
 	else{
 		printf(	"===========================================\n"
-				" %s\n"
-				"===========================================\n"
-				" Digite 0 para indicar uma icÛgnita\n"
-				"-------------------------------------------\n\n", tipo);
+			" %s\n"
+			"===========================================\n"
+			" Digite 0 para indicar uma ic√≥gnita\n"
+			"-------------------------------------------\n\n", tipo);
 		
 	}
 }
@@ -90,16 +90,16 @@ void perguntas(){
 void print_res(){
 	if (opt == 3){
 		printf("\n\nMontante: R$ %.2f"
-			   "\nRendimento: R$ %.2f\n\n\n\n",
-		   		m, j);
+			"\nRendimento: R$ %.2f\n\n\n\n",
+		   	m, j);
 	}
 	else{
 		j = m - c;
 		double parcela = m / t;
 
 		printf("\n\nMontante: R$ %.2f"
-		 		"\nJuros: R$ %.2f"
-		  		"\nParcelas: R$ %.2f\n\n\n\n",
+		 	"\nJuros: R$ %.2f"
+		  	"\nParcelas: R$ %.2f\n\n\n\n",
 		   m, j, parcela);
 	}
 
@@ -116,7 +116,7 @@ void calc_jur_simples(){
 	} 
 	else if (t == 0){
 		t = ((m/c)+1)/i;
-		printf("\n\nTempo de aplicaÁ„o/parcelas: %.2f\n\n\n\n", t);
+		printf("\n\nTempo de aplica√ß√£o/parcelas: %.2f\n\n\n\n", t);
 	}
 	else{
 		m = c * (1+i*t);
@@ -135,7 +135,7 @@ void calc_jur_comp(){
 	} 
 	else if (t == 0){
 		t = log(m/c)/log(i+1);
-		printf("\n\nTempo de aplicaÁ„o/parcelas: %.2f\n\n\n\n", t);
+		printf("\n\nTempo de aplica√ß√£o/parcelas: %.2f\n\n\n\n", t);
 	}
 	else{
 		m = c * pow((1+i), t);
@@ -149,19 +149,21 @@ void calc_res(){
 	if (opt == 1){ calc_jur_simples(); } 
 	else if (opt == 2){ calc_jur_comp(); }
 	else{
-		//investimento com aporte
+		// investimento com aporte
    		m = c*pow((1+i), t) + aporte*(pow((1+i), t)-1)/i;
 		j = m - (c+aporte*t);
+		
 		print_res();
 	}
 }
 
 void continuar(){
 		char ch;
-
+	
 		clr_stdin();
 		printf("\n\nRealizar outro calculo (s/n)? ");		
 		scanf("%c%*[^\n]", &ch); // escaneia apenas a 1a letra
+	
 		if(ch == 'n' || ch == 'N'){
 			opt = 7;
 		}
@@ -182,8 +184,7 @@ int main(){
 					calc_res();
 					
 					continuar();
-				}
-				break;
+				} break;
 			case 4:
 				printf("Encerrando...");
 				break;
