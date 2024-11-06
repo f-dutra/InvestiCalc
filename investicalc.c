@@ -4,15 +4,13 @@
 #include <string.h>
 #include <locale.h>
 
-int opt;
+int opt, cntrl;
 
-double m, c, j, i, t, aporte;
+double m, c, x, i, j, t, aporte;
 /*
-	m = montante
-	c = capital inicial
-	i = taxa de juros (interest)
+	m = montante		c = capital inicial	
+	i = taxa de juros 	j = juro
 	t = tempo
-	j = juros
 */
 void limpar_tela(){
 		system("@cls||clear"); 
@@ -28,7 +26,7 @@ void limpar_entrada(void){	// limpar o buffer de entrada
 void print_menu(){
 	limpar_tela();
 	printf("===========================================\n"
-		" INVESTICALC v2.1\n"
+		" INVESTICALC v2.2\n"
 		"===========================================\n\n"
 		"(1) Calcular investimento\n"
 		"(2) Calcular juros simples\n"
@@ -52,7 +50,6 @@ print_menu_calc(){
 	}
 	
 	if (opt == 1){
-	
 		printf(	"===========================================\n"
 				" %s\n"
 				"===========================================\n\n", tipo);
@@ -63,10 +60,28 @@ print_menu_calc(){
 				"===========================================\n"
 				" Digite 0 para indicar uma icógnita\n"
 				"-------------------------------------------\n\n", tipo);
-		
 	}
 }
 
+void print_res(){
+	if (cntrl == 1){
+		printf("Valor da icógnita: ", x);
+	} 
+	else if (opt == 1){
+		printf("\n\nMontante: R$ %.2f"
+				"\nRendimento: R$ %.2f\n\n\n\n",
+		m, j);
+	}
+	else{
+		j = m - c;
+		double parcela = m / t;
+
+		printf("\n\nMontante: R$ %.2f"
+		 		"\nJuros: R$ %.2f"
+		  		"\nParcelas: R$ %.2f\n\n\n\n",
+		   		m, j, parcela);
+	}
+}
 
 void perguntas(){
 	printf("Informe o capital inicial: ");
@@ -87,62 +102,37 @@ void perguntas(){
 	if (opt != 1 && c == 0 || i == 0 || t == 0){
 		printf("Informe o montante: ");
 		scanf("%lf", &m);
-	}
-}
-
-void print_res(){
-	if (opt == 1){
-		printf("\n\nMontante: R$ %.2f"
-			   "\nRendimento: R$ %.2f\n\n\n\n",
-		   		m, j);
-	}
-	else{
-		j = m - c;
-		double parcela = m / t;
-
-		printf("\n\nMontante: R$ %.2f"
-		 		"\nJuros: R$ %.2f"
-		  		"\nParcelas: R$ %.2f\n\n\n\n",
-		   m, j, parcela);
-	}
-
+		cntrl = 1;
+	} else {cntrl = 0;};
 }
 
 void calc_jur_simples(){
 	if (c == 0){
-		c = m / (i * t + 1);
-		printf("\n\nCapital inicial: R$ %.2f\n\n\n\n", c);
+		x = m / (i * t + 1);
 	} 
 	else if (i == 0){
-		i = ((m / c) - 1)/t;
-		printf("\n\nTaxa de juros: %.2f%%\n\n\n\n", i*100);
+		x = ((m / c) - 1)/t;
 	} 
 	else if (t == 0){
-		t = ((m / c) + 1) / i;
-		printf("\n\nTempo de aplicação/parcelas: %.2f\n\n\n\n", t);
+		x = ((m / c) + 1) / i;
 	}
 	else{
 		m = c * (1 + i * t);
-		print_res();
 	}
 }
 
 void calc_jur_comp(){
 	if (c == 0){
-		c = m / pow((i + 1), t);
-		printf("\n\nCapital inicial: R$ %.2f\n\n\n\n", c);
+		x = m / pow((i + 1), t);
 	} 
 	else if (i == 0){
-		i = pow((m / c), (1 / t)) - 1;
-		printf("\n\nTaxa de juros: %.2f%%\n\n\n\n", i*100);
+		x = pow((m / c), (1 / t)) - 1;
 	} 
 	else if (t == 0){
-		t = log(m / c) / log(i + 1);
-		printf("\n\nTempo de aplicação/parcelas: %.2f\n\n\n\n", t);
+		x = log(m / c) / log(i + 1);
 	}
 	else{
 		m = c * pow((1 + i), t);
-		print_res();
 	}
 }
 
@@ -155,7 +145,6 @@ void calc_res(){
 		//investimento com aporte
    		m = c * pow((1 + i), t) + aporte*(pow((1 + i), t) - 1)/i;
 		j = m - (c + aporte * t);
-		print_res();
 	}
 }
 
@@ -175,14 +164,16 @@ int main(){
 
 	while(opt != 4){
 		print_menu();
-		scanf("%d", &opt);
-		
+		scanf("%d", &opt);		
+		limpar_entrada();
+
 		switch(opt){
 			case 1: case 2: case 3:
 				while(opt != 7){
 					print_menu_calc();
 					perguntas();
 					calc_res();
+					print_res();
 					
 					continuar();
 				}
@@ -193,7 +184,7 @@ int main(){
 			default:
 				if(opt != 404){ opt = 404; }
 				break;
-		}
+			}
 	}
 	return 0;
 }
