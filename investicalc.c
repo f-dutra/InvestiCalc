@@ -5,7 +5,6 @@
 #include <locale.h>
 
 int opt, cntrl;
-
 double m, c, x, i, j, t, aporte;
 /*
 	m = montante		c = capital inicial	
@@ -65,7 +64,7 @@ print_menu_calc(){
 
 void print_res(){
 	if (cntrl == 1){
-		printf("Valor da icógnita: ", x);
+		printf("Valor da icógnita: %.2f", x);
 	} 
 	else if (opt == 1){
 		printf("\n\nMontante: R$ %.2f"
@@ -102,7 +101,7 @@ void perguntas(){
 	if (opt != 1 && c == 0 || i == 0 || t == 0){
 		printf("Informe o montante: ");
 		scanf("%lf", &m);
-		cntrl = 1;
+		cntrl = 1; // indica para a função print_res() que o resultado é uma icógnita
 	} else {cntrl = 0;};
 }
 
@@ -165,8 +164,8 @@ int main(){
 	while(opt != 4){
 		print_menu();
 		scanf("%d", &opt);		
-		limpar_entrada();
-
+		limpar_entrada(); // captura valores não-inteiros (float, char)
+						  // impede um bug que causava um loop infinito do menu
 		switch(opt){
 			case 1: case 2: case 3:
 				while(opt != 7){
